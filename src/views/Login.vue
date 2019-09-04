@@ -18,6 +18,7 @@
 
 <script>
 import { login } from '@/api/user'
+import { mapMutations } from 'vuex'
 export default {
   name: 'Login',
   data () {
@@ -29,6 +30,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setUser']),
     // 点击按钮,登录处理
     async handleLogin () {
       try {
@@ -42,6 +44,9 @@ export default {
         // 1.vuex
         this.$store.commit('setUser', data)
         // 2.本地存储
+        // --- 以上两件事儿 都是在store中完成----
+        // this.$store.commit('setUser', data)
+        this.setUser(data)
         // 跳转到首页
         this.$router.push('/')
         this.$toast.success('登录成功')
