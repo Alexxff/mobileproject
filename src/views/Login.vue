@@ -5,20 +5,40 @@
 
           <!-- 输入框 -->
           <van-cell-group>
-              <van-field left-icon="phone-o" placeholder="请输入手机号码"/>
-              <van-field left-icon="star-o" placeholder="请输入验证码">
+              <van-field v-model="user.mobile" left-icon="phone-o" placeholder="请输入手机号码"/>
+              <van-field v-model="user.code" left-icon="star-o" placeholder="请输入验证码">
               <van-button slot="button" type="default" size="small">发送验证码</van-button></van-field>
           </van-cell-group>
           <!-- 登录按钮 -->
           <div class="login-btn">
-            <van-button class="btn" type='info'>登录</van-button>
+            <van-button class="btn" type='info' @click="handleLogin">登录</van-button>
           </div>
   </div>
 </template>
 
 <script>
+import { login } from '@/api/user'
 export default {
-
+  name: 'Login',
+  data () {
+    return {
+      user: {
+        mobile: '13911111111',
+        code: '246810'
+      }
+    }
+  },
+  methods: {
+    // 点击按钮,登录处理
+    async handleLogin () {
+      try {
+        const res = await login(this.user)
+        console.log(res)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 }
 </script>
 
