@@ -49,6 +49,24 @@ export default {
       }
     }
   },
+  created () {
+    // 配置VeeValidatede 自定义验证信息
+    const dict = {
+      custom: {
+        // 验证的文本框
+        mobile: {
+          // 验证规则失败之后的提示消息
+          required: '请输入手机号',
+          digits: '手机号码必须是11位的数字'
+        },
+        code: {
+          required: '请输入验证码',
+          digits: '验证码必须是6位的数字'
+        }
+      }
+    }
+    this.$validator.localize('custom', dict)
+  },
   methods: {
     ...mapMutations(['setUser']),
     // 点击按钮,登录处理
