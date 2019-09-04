@@ -10,15 +10,24 @@
               2.设置文本框的name属性
               3.展示验证错误信息
               > -->
-              <van-field v-validate="'required'"
+              <van-field v-validate="'required|digits:11'"
               name="mobile"
               :error-message="errors.first('mobile')"
               clearble
               v-model="user.mobile"
               left-icon="phone-o"
               placeholder="请输入手机号"/>
-              <van-field v-model="user.code" left-icon="star-o" placeholder="请输入验证码">
-              <van-button slot="button" type="default" size="small">发送验证码</van-button></van-field>
+              <!-- <van-field v-model="user.code" left-icon="star-o" placeholder="请输入验证码"> -->
+              <!-- <van-button slot="button" type="default" size="small">发送验证码</van-button> -->
+              <van-field
+              v-validate="'required|digits:6'"
+              name="code"
+              :error-message="errors.first('code')"
+              v-model="user.code"
+              left-icon="star-o"
+              placeholder="请输入验证码">
+              <van-button slot="button" type="default" size="small"></van-button>
+              </van-field>
           </van-cell-group>
           <!-- 登录按钮 -->
           <div class="login-btn">
