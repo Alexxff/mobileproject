@@ -5,7 +5,18 @@
 
           <!-- 输入框 -->
           <van-cell-group>
-              <van-field v-model="user.mobile" left-icon="phone-o" placeholder="请输入手机号码"/>
+              <!-- <使用VeeValidate
+              1.通过V-validate设置验证的规则
+              2.设置文本框的name属性
+              3.展示验证错误信息
+              > -->
+              <van-field v-validate="'required'"
+              name="mobile"
+              :error-message="errors.first('mobile')"
+              clearble
+              v-model="user.mobile"
+              left-icon="phone-o"
+              placeholder="请输入手机号"/>
               <van-field v-model="user.code" left-icon="star-o" placeholder="请输入验证码">
               <van-button slot="button" type="default" size="small">发送验证码</van-button></van-field>
           </van-cell-group>
