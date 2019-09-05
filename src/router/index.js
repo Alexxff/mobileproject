@@ -9,7 +9,7 @@ Vue.use(Vuex)
 
 export default new Router({
   routes: [{
-    name: 'tabbar',
+    // name: 'tabbar',
     path: '/',
     component: Tabbar,
     childern: [
