@@ -6,7 +6,7 @@
     <van-tabs animated v-model="activeIndex">
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 ,不同的标签页下有不同的列表 -->
-        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+        <van-list v-model="currentChannel.loading" :finished="currentChannel.finished" finished-text="没有更多了" @load="onLoad">
           <van-cell v-for="article in currentChannel.articles" :key="article.art_id" :title="article.title" />
         </van-list>
       </van-tab>
@@ -48,6 +48,8 @@ export default {
         data.channels.forEach((channel) => {
           channel.timestamp = null
           channel.articles = []
+          channel.loading = false
+          channel.finished = false
         })
         // console.log(data)
         this.channels = data.channels
@@ -72,7 +74,13 @@ export default {
       this.currentChannel.timestamp = data.pre_timestamp
       // console.log(data.results)
       this.currentChannel.articles.push(...data.results)
-      this.loading = false
+      // this.loading = false
+      this.currentChannel.loading = false
+      // 文章加载完毕
+      if (data.results.length === 0) {
+        // this.finished = true
+        this.currentChannel.finished = true
+      }
       // console.log(this.currentChannel.articles)
       // 当前对象中的时间戳
       // 当前频道对象的文章数组
