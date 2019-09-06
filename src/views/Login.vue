@@ -26,7 +26,7 @@
               v-model="user.code"
               left-icon="star-o"
               placeholder="请输入验证码">
-              <van-button slot="button" type="default" size="small"></van-button>
+              <van-button slot="button" type="default" size="small">发送验证码</van-button>
               </van-field>
           </van-cell-group>
           <!-- 登录按钮 -->
@@ -52,7 +52,7 @@ export default {
     return {
       user: {
         mobile: '13911111111',
-        code: '246810'
+        code: ''
       },
       // 控制按钮是否显示正在登陆
       loading: false

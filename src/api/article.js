@@ -14,9 +14,9 @@ export const getArticles = ({
 }) => {
   return request.get('/app/v1_1/articles', {
     params: {
-      channelId,
+      channel_id: channelId,
       timestamp,
-      withTop
+      with_top: withTop
     }
   })
 }
