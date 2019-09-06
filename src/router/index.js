@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Tabbar from '@/views/Tabbar.vue'
-import Home from '@/views/home/index.vue'
+import Home from '@/views/home'
 import Vuex from 'vuex'
 
 Vue.use(Router)
@@ -12,7 +12,7 @@ export default new Router({
     // name: 'tabbar',
     path: '/',
     component: Tabbar,
-    childern: [
+    children: [
       {
         name: 'home',
         path: '',
