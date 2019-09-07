@@ -44,7 +44,7 @@
                   <span>{{article.comm_count}}</span>&nbsp;
                   <span>{{article.pubdate}}</span>
 &nbsp;
-                  <van-icon name="cross" class="close" />
+                  <van-icon name="cross" class="close" @click="showMorteAction=true"/>
                 </p>
               </div>
             </van-cell>
@@ -53,7 +53,7 @@
       </van-tab>
     </van-tabs>
     <!-- 弹出层组件 -->
-    <more-action></more-action>
+    <more-action v-model="showMorteAction"></more-action>
   </div>
 </template>
 
@@ -83,7 +83,8 @@ export default {
       // 通过该Index，可以找到当前的频道对象
       activeIndex: 0,
       // 下拉更新完毕之后显示的成功提示
-      successText: ''
+      successText: '',
+      showMorteAction: false
     }
   },
   created () {
