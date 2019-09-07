@@ -29,7 +29,14 @@
                   <van-grid-item
                   v-for="(img,index) in article.cover.images"
                   :key="img+index">
-                    <van-image height="80" :src="img" />
+                    <van-image lazy-load height="80" :src="img" >
+                      <!-- 图片的加载提示 -->
+                      <template v-slot:loading>
+                        <van-loading type="spinner" size="20" />
+                      </template>
+                      <!-- 自定义加载失败提示 -->
+                      <template v-slot:error>加载失败</template>
+                    </van-image>
                   </van-grid-item>
                 </van-grid>
                 <p>
@@ -51,6 +58,10 @@
 <script>
 import { getDefaultOrUserChannels } from '@/api/channel'
 import { getArticles } from '@/api/article'
+import Vue from 'vue'
+import { Lazyload } from 'vant'
+// options 为可选参数，无则不传
+Vue.use(Lazyload)
 export default {
   data () {
     return {
@@ -123,7 +134,6 @@ export default {
       // console.log(this.currentChannel.articles)
       // 当前对象中的时间戳
       // 当前频道对象的文章数组
-
       // // 异步更新数据
       // setTimeout(() => {
       //   for (let i = 0; i < 10; i++) {
@@ -131,7 +141,6 @@ export default {
       //   }
       //   // 加载状态结束
       //   this.loading = false
-
       //   // 数据全部加载完成
       //   if (this.list.length >= 40) {
       //     this.finished = true
