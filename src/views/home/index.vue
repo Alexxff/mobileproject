@@ -5,10 +5,44 @@
     <!-- 频道列表 -->
     <van-tabs animated v-model="activeIndex">
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
-        <!-- 文章列表 ,不同的标签页下有不同的列表 -->
-        <van-list v-model="currentChannel.loading" :finished="currentChannel.finished" finished-text="没有更多了" @load="onLoad">
-          <van-cell v-for="article in currentChannel.articles" :key="article.art_id.toString()" :title="article.title" />
-        </van-list>
+        <!-- 下拉加载更多组件 -->
+        <van-pull-refresh
+          :success-text="successText"
+          v-model="currentChannel.pullLoading"
+          @refresh="onRefresh"
+        >
+          <!-- 文章列表 ,不同的标签页下有不同的列表 -->
+          <van-list
+            v-model="currentChannel.loading"
+            :finished="currentChannel.finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+            <van-cell
+              v-for="article in currentChannel.articles"
+              :key="article.art_id.toString()"
+              :title="article.title"
+            >
+              <div slot="label">
+                <!-- grid显示封面 -->
+                <van-grid v-if="article.cover.type" :border="false" :column-num="3">
+                  <van-grid-item
+                  v-for="(img,index) in article.cover.images"
+                  :key="img+index">
+                    <van-image height="80" :src="img" />
+                  </van-grid-item>
+                </van-grid>
+                <p>
+                  <span>{{article.aut_name}}</span>&nbsp;
+                  <span>{{article.comm_count}}</span>&nbsp;
+                  <span>{{article.pubdate}}</span>
+&nbsp;
+                  <van-icon name="cross" class="close" />
+                </p>
+              </div>
+            </van-cell>
+          </van-list>
+        </van-pull-refresh>
       </van-tab>
     </van-tabs>
   </div>
@@ -28,14 +62,16 @@ export default {
       channels: [],
       // tab组件中默认显示的tab项的索引(Index)
       // 通过该Index，可以找到当前的频道对象
-      activeIndex: 0
+      activeIndex: 0,
+      // 下拉更新完毕之后显示的成功提示
+      successText: ''
     }
   },
   created () {
     this.loadChannels()
   },
   computed: {
-  // 返回当前的频道对象
+    // 返回当前的频道对象
     currentChannel () {
       return this.channels[this.activeIndex]
     }
@@ -45,11 +81,14 @@ export default {
       try {
         const data = await getDefaultOrUserChannels()
         // 给所有的频道设置，时间戳和文章数组
-        data.channels.forEach((channel) => {
+        data.channels.forEach(channel => {
           channel.timestamp = null
           channel.articles = []
+          // 上拉加载
           channel.loading = false
           channel.finished = false
+          // 下拉加载
+          channel.pullLoading = false
         })
         // console.log(data)
         this.channels = data.channels
@@ -98,6 +137,25 @@ export default {
       //     this.finished = true
       //   }
       // }, 500)
+    },
+    // 下拉加载更多
+    async onRefresh () {
+      try {
+        const data = await getArticles({
+          channelId: this.currentChannel.id,
+          // 时间戳
+          timestamp: Date.now(),
+          // 是否包含置顶1，0不包含
+          withTop: 1
+        })
+        // 设置加载完成
+        this.currentChannel.pullLoading = false
+        // 把数据放到数组的最前面（最新数据）
+        this.currentChannel.articles.unshift(...data.results)
+        this.successText = `加载了${data.results.length}条数据`
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
@@ -112,17 +170,19 @@ export default {
 //    margin-top: 46px;
 //    margin-bottom: 50px;
 // }
-.van-tabs{
-  /deep/ .van-tabs__wrap{
-    position:fixed;
-    top:46px;
-    left:0;
-    z-index:100;
+.van-tabs {
+  /deep/ .van-tabs__wrap {
+    position: fixed;
+    top: 46px;
+    left: 0;
+    z-index: 100;
   }
-  /deep/ .van-tabs__content{
+  /deep/ .van-tabs__content {
     margin-top: 90px;
     margin-bottom: 50px;
   }
 }
-
+.close {
+  float: right;
+}
 </style>
