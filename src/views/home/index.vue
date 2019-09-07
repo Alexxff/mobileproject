@@ -7,7 +7,7 @@
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 ,不同的标签页下有不同的列表 -->
         <van-list v-model="currentChannel.loading" :finished="currentChannel.finished" finished-text="没有更多了" @load="onLoad">
-          <van-cell v-for="article in currentChannel.articles" :key="article.art_id" :title="article.title" />
+          <van-cell v-for="article in currentChannel.articles" :key="article.art_id.toString()" :title="article.title" />
         </van-list>
       </van-tab>
     </van-tabs>
