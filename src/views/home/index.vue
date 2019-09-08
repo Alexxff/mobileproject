@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 导航头 -->
-    <van-nav-bar fixed="true" title="黑马头条" />
+    <van-nav-bar fixed title="黑马头条" />
     <!-- 频道列表 -->
     <van-tabs animated v-model="activeIndex">
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
@@ -42,9 +42,8 @@
                 <p>
                   <span>{{article.aut_name}}</span>&nbsp;
                   <span>{{article.comm_count}}</span>&nbsp;
-                  <span>{{article.pubdate}}</span>
-&nbsp;
-                  <van-icon name="cross" class="close" @click="showMorteAction=true"/>
+                  <span>{{ article.pubdate | fmtDate }}</span>&nbsp;
+                  <van-icon name="cross" class="close" @click="handleAction(article)"/>
                 </p>
               </div>
             </van-cell>
@@ -53,7 +52,8 @@
       </van-tab>
     </van-tabs>
     <!-- 弹出层组件 -->
-    <more-action v-model="showMorteAction"></more-action>
+    <!-- 如果article的值为null不显示more-action -->
+    <more-action v-if="currentArticle" :article="currentArticle" v-model="showMorteAction"></more-action>
   </div>
 </template>
 
@@ -84,7 +84,9 @@ export default {
       activeIndex: 0,
       // 下拉更新完毕之后显示的成功提示
       successText: '',
-      showMorteAction: false
+      showMorteAction: false,
+      // 点击x的时候记录的当前文章对象
+      currentArticle: null
     }
   },
   created () {
@@ -128,7 +130,7 @@ export default {
         // 是否包含置顶1，0不包含
         withTop: 1
       })
-      console.log(data)
+      // console.log(data)
       // 记录文章列表，记录最后一条数据的时间戳
       this.currentChannel.timestamp = data.pre_timestamp
       // console.log(data.results)
@@ -174,6 +176,11 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    // 点击x按钮，弹出MoreAction，并且记录对应的文章对象
+    handleAction (article) {
+      this.showMorteAction = true
+      this.currentArticle = article
     }
   }
 }
