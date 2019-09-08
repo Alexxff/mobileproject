@@ -63,6 +63,9 @@ export default {
       try {
         await dislikeArticle(this.article.art_id)
         this.$toast.success('操作成功')
+        // 隐藏，移除掉数据
+        // 告知父组件，操作成功
+        this.$emit('handleSuccess')
       } catch (err) {
         this.$toast.fail('操作失败')
       }
