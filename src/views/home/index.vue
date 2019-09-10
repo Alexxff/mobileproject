@@ -4,6 +4,8 @@
     <van-nav-bar fixed title="黑马头条" />
     <!-- 频道列表 -->
     <van-tabs animated v-model="activeIndex">
+      <!-- 点击小按钮,点击弹出频道管理的弹出层 -->
+      <van-icon slot="nav-right" name="wap-nav" class="nav-btn" @click="showChannelEdit=true"/>
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 下拉加载更多组件 -->
         <van-pull-refresh
@@ -55,7 +57,7 @@
     <!-- 如果article的值为null不显示more-action -->
     <more-action @handleSuccess="handleSuccess" v-if="currentArticle" :article="currentArticle" v-model="showMorteAction"></more-action>
     <!-- 弹出频道管理层 -->
-    <channel-edit></channel-edit>
+    <channel-edit v-model="showChannelEdit"></channel-edit>
   </div>
 </template>
 
@@ -92,7 +94,9 @@ export default {
       successText: '',
       showMorteAction: false,
       // 点击x的时候记录的当前文章对象
-      currentArticle: null
+      currentArticle: null,
+      // 控制频道管理的弹出层的显示隐藏
+      showChannelEdit: false
     }
   },
   created () {
@@ -246,5 +250,13 @@ export default {
 }
 .close {
   float: right;
+}
+.nav-btn{
+  position:fixed;
+  right:10px;
+  line-height: 44px;
+  background-color: #fff;
+  opacity: 0.8;
+  font-size:22px;
 }
 </style>

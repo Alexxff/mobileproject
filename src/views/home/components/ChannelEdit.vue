@@ -1,6 +1,7 @@
 <template>
 <van-popup
-  v-model="show"
+:value="value"
+@input="$emit('input',$event)"
   position="bottom"
   :style="{ height: '80%' }"
 >
@@ -11,9 +12,10 @@ hello
 <script>
 export default {
   name: 'ChannelEdit',
-  data () {
-    return {
-      show: true
+  props: {
+    value: {
+      type: Boolean,
+      required: true
     }
   }
 }
