@@ -57,7 +57,7 @@
     <!-- 如果article的值为null不显示more-action -->
     <more-action @handleSuccess="handleSuccess" v-if="currentArticle" :article="currentArticle" v-model="showMorteAction"></more-action>
     <!-- 弹出频道管理层 -->
-    <channel-edit v-model="showChannelEdit"></channel-edit>
+    <channel-edit :channels="channels" v-model="showChannelEdit"></channel-edit>
   </div>
 </template>
 
