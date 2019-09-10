@@ -54,6 +54,8 @@
     <!-- 弹出层组件 -->
     <!-- 如果article的值为null不显示more-action -->
     <more-action @handleSuccess="handleSuccess" v-if="currentArticle" :article="currentArticle" v-model="showMorteAction"></more-action>
+    <!-- 弹出频道管理层 -->
+    <channel-edit></channel-edit>
   </div>
 </template>
 
@@ -65,12 +67,15 @@ import Vue from 'vue'
 import { Lazyload } from 'vant'
 // 加载moreaction组件
 import MoreAction from './components/MoreAction'
+// 导入频道管理组件
+import ChannelEdit from './components/ChannelEdit'
 // options 为可选参数，无则不传
 Vue.use(Lazyload)
 export default {
   name: 'Home',
   components: {
-    MoreAction
+    MoreAction,
+    ChannelEdit
   },
   data () {
     return {
