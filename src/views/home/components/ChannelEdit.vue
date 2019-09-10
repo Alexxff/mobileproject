@@ -37,7 +37,7 @@
         slot="icon"
         class="close-icon"
         name="close"
-        v-show="isEdit"
+        v-show="isEdit && index !==0"
         />
         </van-grid-item>
     </van-grid>
