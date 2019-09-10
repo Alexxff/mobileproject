@@ -57,7 +57,7 @@
     <!-- 如果article的值为null不显示more-action -->
     <more-action @handleSuccess="handleSuccess" v-if="currentArticle" :article="currentArticle" v-model="showMorteAction"></more-action>
     <!-- 弹出频道管理层 -->
-    <channel-edit :channels="channels" v-model="showChannelEdit"></channel-edit>
+    <channel-edit :active="activeIndex" :channels="channels" v-model="showChannelEdit"></channel-edit>
   </div>
 </template>
 
@@ -143,6 +143,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
+      console.log(this.channels)
     },
     async onLoad () {
       // 发送请求

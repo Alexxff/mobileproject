@@ -25,10 +25,13 @@
     </van-cell>
     <van-grid>
         <van-grid-item
-        v-for="channel in channels"
+
+        v-for="(channel,index) in channels"
         :key="channel.id"
-        :text="channel.name"
         >
+        <div slot="text" class="van-grid-item__text" :class="{active: active===index}">
+          {{channel.name}}
+        </div>
         <!-- 关闭按钮 -->
         <van-icon
         slot="icon"
@@ -62,6 +65,11 @@ export default {
     // 接受父组件传过来的我的频道
     channels: {
       type: Array,
+      required: true
+    },
+    // 接受当前显示的频道的索引
+    active: {
+      type: Number,
       required: true
     }
   },
@@ -110,5 +118,8 @@ export default {
     position: absolute;
     right:0;
     top:0;
+}
+.active{
+  color:red
 }
 </style>
