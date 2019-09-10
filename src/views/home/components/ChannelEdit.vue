@@ -42,15 +42,16 @@
     <van-cell title="推荐频道" label="点击添加频道"/>
     <van-grid>
         <van-grid-item
-        v-for="value in 8"
-        :key="value"
-        text="文字"
+        v-for="channel in recommendChanne"
+        :key="channel.id"
+        :text="channel.name"
         />
     </van-grid>
 </van-popup>
 </template>
 
 <script>
+import { getAllChannels } from '@/api/channel'
 export default {
   name: 'ChannelEdit',
   props: {
@@ -58,15 +59,47 @@ export default {
       type: Boolean,
       required: true
     },
+    // 接受父组件传过来的我的频道
     channels: {
       type: Array,
       required: true
     }
   },
+  computed: {
+    // 用来过自己的频道和全部频道重复的地方
+    recommendChanne () {
+      // 1.获取我的频道中所有id组成的数组
+      // map()遍历数组,返回一个新的数组,新数组中的元素由回调函数中返回的元素组成
+      const ids = this.channels.map((channel) => {
+        return channel.id
+      })
+      // 2.过滤所有频道,把频道id出现在上面数组中的项去除
+      // filter()把满足条件的item,返回组成一个新的数组
+      return this.allChannels.filter((channel) => {
+        // includes() es6新增,判断数组织中是否包含某一项
+        return !ids.includes(channel.id)
+      })
+    }
+  },
   data () {
     return {
       // 是否是编辑模式
-      isEdit: false
+      isEdit: false,
+      // 存储所有频道
+      allChannels: []
+    }
+  },
+  created () {
+    this.loadAllChannels()
+  },
+  methods: {
+    async loadAllChannels () {
+      try {
+        const data = await getAllChannels()
+        this.allChannels = data.channels
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
