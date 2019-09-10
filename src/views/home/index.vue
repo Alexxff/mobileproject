@@ -57,7 +57,7 @@
     <!-- 如果article的值为null不显示more-action -->
     <more-action @handleSuccess="handleSuccess" v-if="currentArticle" :article="currentArticle" v-model="showMorteAction"></more-action>
     <!-- 弹出频道管理层 -->
-    <channel-edit :active="activeIndex" :channels="channels" v-model="showChannelEdit"></channel-edit>
+    <channel-edit @activeChange="handleChange" :active="activeIndex" :channels="channels" v-model="showChannelEdit"></channel-edit>
   </div>
 </template>
 
@@ -223,6 +223,11 @@ export default {
       })
       // 删除指定位置的元素
       articles.splice(index, 1)
+    },
+    handleChange (index) {
+      this.activeIndex = index
+      // 关闭弹出框
+      this.showChannelEdit = false
     }
   }
 }
