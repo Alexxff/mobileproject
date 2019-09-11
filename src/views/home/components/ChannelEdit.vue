@@ -27,7 +27,7 @@
         <van-grid-item
         v-for="(channel,index) in channels"
         :key="channel.id"
-        @click="handleMyChannelItem(index)"
+        @click="handleMyChannelItem(index,channel.id)"
         >
         <div slot="text" class="van-grid-item__text" :class="{active: active===index}">
           {{channel.name}}
@@ -54,7 +54,9 @@
 </template>
 
 <script>
-import { getAllChannels } from '@/api/channel'
+import { getAllChannels, deleteChannel } from '@/api/channel'
+import { mapState } from 'vuex'
+import { setItem } from '@/utils/localStorage'
 export default {
   name: 'ChannelEdit',
   props: {
@@ -75,6 +77,7 @@ export default {
   },
   computed: {
     // 用来过自己的频道和全部频道重复的地方
+    ...mapState(['user']),
     recommendChanne () {
       // 1.获取我的频道中所有id组成的数组
       // map()遍历数组,返回一个新的数组,新数组中的元素由回调函数中返回的元素组成
@@ -110,14 +113,30 @@ export default {
       }
     },
     // 点击我的频道的时候
-    handleMyChannelItem (index) {
+    async handleMyChannelItem (index, channelId) {
       // 1.非编辑模式
       if (!this.isEdit) {
         // 告诉父组件,选中的频道的索引
         // 关闭对话框
         this.$emit('activeChange', index)
+        return false
       }
       // 2.编辑模式
+      // 2.1 把点击的频道,从我的频道移除
+      this.channels.splice(index, 1)
+      // 2.2判断是否登录
+      // 通过mapstatus做了映射
+      if (this.user) {
+        try {
+          await deleteChannel(channelId)
+        } catch (err) {
+          this.$toast.fail('操作失败')
+        }
+        // 2.3如果没有登录,发送请求
+        return false
+      }
+      // 2.4没有登录,把频道列表记录到本地存储
+      setItem('channels', this.channels)
     }
   }
 }
