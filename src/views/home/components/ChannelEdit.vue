@@ -6,7 +6,7 @@
   :style="{ height: '90%' }"
 >
 <van-cell icon="cross" @click="$emit('input',false)"/>
-    <!-- 我的代码 -->
+    <!-- 我的频道 -->
     <van-cell title="我的频道" label="点击进入频道">
         <van-button
         round
@@ -45,6 +45,7 @@
     <van-cell title="推荐频道" label="点击添加频道"/>
     <van-grid>
         <van-grid-item
+        @click="handleChannelItem(channel)"
         v-for="channel in recommendChanne"
         :key="channel.id"
         :text="channel.name"
@@ -136,6 +137,17 @@ export default {
         return false
       }
       // 2.4没有登录,把频道列表记录到本地存储
+      setItem('channels', this.channels)
+    },
+    handleChannelItem (channel) {
+      // 1.把channel添加到我的频道
+      this.channels.push(channel)
+      // 2.判断是否登录
+      if (this.user) {
+      // 3.如果登录,发送请求
+        return false
+      }
+      // 4.如果没有登录,把我的频道存储到本地存储
       setItem('channels', this.channels)
     }
   }
