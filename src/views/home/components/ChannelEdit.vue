@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { getAllChannels, deleteChannel } from '@/api/channel'
+import { getAllChannels, deleteChannel, addChannel } from '@/api/channel'
 import { mapState } from 'vuex'
 import { setItem } from '@/utils/localStorage'
 export default {
@@ -124,28 +124,39 @@ export default {
       }
       // 2.编辑模式
       // 2.1 把点击的频道,从我的频道移除
-      this.channels.splice(index, 1)
+
       // 2.2判断是否登录
       // 通过mapstatus做了映射
       if (this.user) {
         try {
           await deleteChannel(channelId)
+          this.channels.splice(index, 1)
         } catch (err) {
           this.$toast.fail('操作失败')
         }
         // 2.3如果没有登录,发送请求
         return false
+      } else {
+        this.channels.splice(index, 1)
       }
       // 2.4没有登录,把频道列表记录到本地存储
       setItem('channels', this.channels)
     },
-    handleChannelItem (channel) {
+    async handleChannelItem (channel) {
       // 1.把channel添加到我的频道
-      this.channels.push(channel)
       // 2.判断是否登录
       if (this.user) {
       // 3.如果登录,发送请求
+        try {
+          await addChannel(channel.id, this.channels.length)
+          this.channels.push(channel)
+        } catch (err) {
+          console.log(err)
+          this.$toast.fail('操作失败')
+        }
         return false
+      } else {
+        this.channels.push(channel)
       }
       // 4.如果没有登录,把我的频道存储到本地存储
       setItem('channels', this.channels)
