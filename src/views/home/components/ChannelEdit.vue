@@ -143,6 +143,21 @@ export default {
       setItem('channels', this.channels)
     },
     async handleChannelItem (channel) {
+      // 添加响应式原理
+      this.$set(channel, 'timestamp', null)
+      this.$set(channel, 'articles', [])
+      this.$set(channel, 'loading', false)
+      this.$set(channel, 'finished', false)
+      this.$set(channel, 'pullLoading', false)
+      // 类似于响应式原理代码:
+      // channle.timestamp=null
+      // channel.articles=[]
+      // 上拉加载
+      // channel.loading=false
+      // channel.finished=false
+      // 下拉加载
+      // channel.pullLoading=false
+
       // 1.把channel添加到我的频道
       // 2.判断是否登录
       if (this.user) {
@@ -150,6 +165,7 @@ export default {
         try {
           await addChannel(channel.id, this.channels.length)
           this.channels.push(channel)
+          console.log(channel)
         } catch (err) {
           console.log(err)
           this.$toast.fail('操作失败')
