@@ -20,14 +20,14 @@
     <van-cell-group v-show="!value">
         <van-cell title="单元格">
             <!-- 自定义右侧内容 -->
-            <div>
+            <div v-show="isEdit" style="display:inline-block">
                 <span>全部删除</span>&nbsp;
-                <span>完成</span>&nbsp;
-                <van-icon name="delete" size="18px"/>
+                <span @click="isEdit=false">完成</span>&nbsp;
             </div>
+            <van-icon v-show="!isEdit" @click="isEdit=true" name="delete" size="18px"/>
         </van-cell>
         <van-cell title="单元格">
-            <van-icon name="close" size="18px"/>
+            <van-icon v-show="isEdit" name="close" size="18px"/>
         </van-cell>
     </van-cell-group>
 </div>
@@ -41,7 +41,9 @@ export default {
     return {
       value: '',
       // 存储搜索建议
-      suggestionList: []
+      suggestionList: [],
+      // 编辑模式
+      isEdit: false
     }
   },
   methods: {
