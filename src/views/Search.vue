@@ -5,7 +5,7 @@
     v-model="value"
     placeholder="请输入搜索关键词"
     show-action
-    @search="onSearch"
+    @search="onSearch(value)"
     @cancel="onCancel"
     @input="handleInput"
     clearable
@@ -13,12 +13,12 @@
     />
     <!-- 搜索提示 -->
     <van-cell-group v-show="value">
-        <van-cell v-for="item in suggestionList" :key="item" :title="item" icon="search"/>
+        <van-cell @click="onSearch(item)" v-for="item in suggestionList" :key="item" :title="item" icon="search"/>
         <!-- <van-cell title="单元格" icon="search"/> -->
     </van-cell-group>
     <!-- 历史记录 -->
     <van-cell-group v-show="!value">
-        <van-cell title="单元格">
+        <van-cell title="历史记录">
             <!-- 自定义右侧内容 -->
             <div v-show="isEdit" style="display:inline-block">
                 <span>全部删除</span>&nbsp;
@@ -26,7 +26,7 @@
             </div>
             <van-icon v-show="!isEdit" @click="isEdit=true" name="delete" size="18px"/>
         </van-cell>
-        <van-cell title="单元格">
+        <van-cell v-for="item in histories" :key="item" :title="item">
             <van-icon v-show="isEdit" name="close" size="18px"/>
         </van-cell>
     </van-cell-group>
@@ -43,11 +43,19 @@ export default {
       // 存储搜索建议
       suggestionList: [],
       // 编辑模式
-      isEdit: false
+      isEdit: false,
+      // 历史记录
+      histories: []
     }
   },
   methods: {
-    onSearch () {},
+    onSearch (item) {
+      // 判断histories中是否已经存在item
+      if (!this.histories.includes(item)) {
+        // 记录搜索历史
+        this.histories.push(item)
+      }
+    },
     onCancel () {},
     // 在文本框输入的过程中获取搜索提示
     async handleInput () {

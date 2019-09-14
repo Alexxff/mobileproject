@@ -3,7 +3,7 @@ import JSONbig from 'json-bigint'
 import store from '@/store'
 // 创建一个axios的实例,设置不同的baseURL
 const instance = axios.create({
-  timeout: 5000,
+  // timeout: 5000,
   baseURL: ' http://ttapi.research.itcast.cn'
 })
 // 获取服务器返回的数据,并且是在处理数据之前使用
