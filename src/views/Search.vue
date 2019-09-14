@@ -13,7 +13,9 @@
     />
     <!-- 搜索提示 -->
     <van-cell-group v-show="value">
-        <van-cell @click="onSearch(item)" v-for="item in suggestionList" :key="item" :title="item" icon="search"/>
+        <van-cell @click="onSearch(item)" v-for="item in suggestionList" :key="item" :title="item" icon="search">
+        <div slot="title" v-html="highlight(item)"></div>
+        </van-cell>
         <!-- <van-cell title="单元格" icon="search"/> -->
     </van-cell-group>
     <!-- 历史记录 -->
@@ -96,6 +98,13 @@ export default {
     handleDelete (index) {
       this.histories.splice(index, 1)
       storageTools.setItem('history', this.histories)
+    },
+    // 高亮显示搜索建议中的匹配内容
+    highlight (item) {
+      // item 是提示项目
+      // this.value是输入的内容
+      const reg = new RegExp(this.value, 'gi')
+      return item.replace(reg, `<span style="color:red">${this.value}</span>`)
     }
   }
 }
